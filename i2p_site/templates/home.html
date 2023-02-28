@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link href="/static/semantic.min.css" rel="stylesheet" type="text/css">
+        <script src="/static/semantic.min.js"></script>        
+        <style>
+            body, h1, h3 {
+                font-family: 'Roboto Mono', monospace;
+            }
+            h1 {
+                margin-bottom: 30px;
+            }
+            .container {               
+                /* display: flex;
+			    flex-direction: column; */
+                padding-top: 80px;
+                padding-left: 100px;
+            }
+            .input_box {
+                width: 250px;
+                margin-bottom: 10px;
+            }
+            .output_box {
+                width: 600px;
+                margin-bottom: 10px;
+                
+            }
+            .or {
+                margin-left: 30px ;
+                margin-right: 30px;
+            }
+            .img {
+                width: 600px;
+                display: flex;
+			    flex-direction: row;
+                align-items:center;
+                padding-bottom: 30px;
+                border-bottom: 1px solid rgb(190, 190, 190);
+            }
+            .refresh {
+                display:none
+            }
+            .refresh_box {
+                margin-top: 30px;
+            }
+           
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Image to Prompt</h1>
+            <div class="img">            
+                <div>
+                    <h3>Image URL</h3>
+                    <div class="ui form">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <div class="field input_box">
+                                <input type="text" name="image_link" placeholder="http://xxx.jpg">
+                            </div>    
+                            <div>
+                                <input type="submit" value="Submit" onclick="wait_result()" class="ui submit button">
+                            </div>                  
+                        </form>
+                    </div>
+                </div>
+                <div class="or"><p>or</p></div>
+                <div>
+                    <h3>Image File</h3>
+                    <div class="ui form">
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="field input_box">
+                                <input type="file" name="image_user" accept="image/*">
+                            </div>
+                            <div>
+                                <input type="submit" value="Submit" onclick="wait_result()" class="ui submit button">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Prompt</h3>
+            <div class="ui form">
+                <div class="output_box">
+                    <textarea disabled id="prompt" rows="4">{{ prompt }}</textarea>
+                </div>
+            </div>
+                <div>
+                    <button onclick="copy_text()" class="ui basic button">
+                        Copy
+                    </button>
+                </div>
+                    <!-- <form action="" method="POST">
+                        {% csrf_token %}
+                        <input name="refresh" class="refresh">    
+                        <div>
+                            <button type="submit">
+                                <span class="material-symbols-outlined">
+                                    cached
+                                </span>
+                            </button>
+                        </div> 
+                    </form> -->
+            </div>
+            
+
+        </div>
+        <script>
+            function wait_result() {
+                document.getElementById("prompt").innerHTML = "waiting...";
+            }
+            
+            function customAlert(msg,duration){
+                var styler = document.createElement("div");
+                styler.setAttribute("style","padding-left: 100px;padding-top:10px");
+                styler.innerHTML = "<p>"+msg+"</p>";
+                setTimeout(function(){
+                    styler.parentNode.removeChild(styler);
+                },duration);
+                document.body.appendChild(styler);
+            }
+
+            function copy_text() {
+                var copyText = document.getElementById("prompt");
+                copyText.select();
+                copyText.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(copyText.value);
+                customAlert("Text Copied","2000");
+            }
+
+        </script>
+
+    </body>
+</html>
