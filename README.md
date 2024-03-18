@@ -29,3 +29,5 @@ python manage.py runserver 0.0.0.0:port
 cmd ipconfig (192.168.x.x)
 192.168.x.x: port
 ```
+
+
